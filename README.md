@@ -4,6 +4,7 @@ This repository implements a complete MLOps pipeline using **Linear Regression**
 
 Assignment by: Akshay Kumar - G24AI1033 
 Course: ML Ops – IIT Jodhpur  
+Report added for reference
 
 
 ## Objective
@@ -23,18 +24,28 @@ To build a complete, production-ready MLOps pipeline with:
 
 ```
 .
-├── src/
-│   ├── train.py         # Trains and saves the Linear Regression model
-│   ├── quantize.py      # Quantizes the model to uint8 and evaluates
-│   ├── predict.py       # Loads model and makes predictions (used in CI/CD)
-│   └── utils.py         # Common utilities (e.g., data loading)
-├── tests/
-│   └── test_train.py    # Unit tests for training pipeline
 ├── .github/
 │   └── workflows/
-│       └── ci.yml       # GitHub Actions CI/CD workflow
-├── requirements.txt     # Python dependencies
-├── Dockerfile           # Container build instructions
+│       └── ci.yml
+├── .pytest_cache/
+├── models/
+│   └── linear_regression_model.joblib
+├── parameters/
+│   ├── quant_params.joblib
+│   └── unquant_params.joblib
+├── src/
+|   ├── _pycache_
+│   ├── __init__.py
+│   ├── train.py
+│   ├── quantize.py
+│   ├── predict.py
+│   └── utils.py
+├── tests/
+|   ├── _pycache_
+│   ├── __init__.py
+│   └── test_train.py
+├── Dockerfile
+├── requirements.txt
 ├── .gitignore
 └── README.md
 ```
@@ -47,7 +58,7 @@ To build a complete, production-ready MLOps pipeline with:
 |-----------------------|----------------|------------------|
 | **R² Score**          | 0.5758         | 0.4376           |
 | **Mean Squared Error**| 0.5559         | 0.7370           |
-| **File Size**         | 681 Bytes      | 417 Bytes        |
+| **File Size**         | 681 Bytes      | 403 Bytes        |
 
 Quantization was done manually using symmetric scaling to `uint8`, with the intercept preserved in `float32` for better accuracy.
 
@@ -123,8 +134,9 @@ Used: `sklearn.datasets.fetch_california_housing()`
 ## Submission Details
 
 - All work is in the **`main`** branch.
-- All steps implemented via command line (no web uploads).
+- All steps implemented via command line
 - Link submitted through [Google Form](https://forms.gle/ANbjTHzanZwwZj8n6).
 - No plagiarism or hardcoded values.
+- Report added for reference
 
 ---

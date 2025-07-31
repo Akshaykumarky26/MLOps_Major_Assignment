@@ -1,0 +1,74 @@
+name: MLOps CI/CD Pipeline
+
+on:
+  push:
+    [cite_start]branches: [ main ] # Run on every push to the main branch 
+
+jobs:
+  # Job 1: test_suite
+  test_suite:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run pytest
+        run: pytest
+
+  # Job 2: train_and_quantize
+  train_and_quantize:
+    runs-on: ubuntu-latest
+    [cite_start]needs: test_suite 
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run training and quantization
+        run: |
+          python -m src.train
+          python -m src.quantize
+
+      - name: Upload model and parameters artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: model-and-parameters
+          path: |
+            models/
+            parameters/
+          retention-days: 1
+
+  # Job 3: build_and_test_container
+  build_and_test_container:
+    runs-on: ubuntu-latest
+    [cite_start]needs: train_and_quantize
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download model and parameters artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: model-and-parameters
+          path: .
+
+      - name: Build Docker image
+        run: docker build -t mlops-project .
+
+      - name: Run Docker container and test prediction
+        run: docker run mlops-project
